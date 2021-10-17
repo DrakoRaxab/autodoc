@@ -1,29 +1,19 @@
-import com.codeborne.selenide.Configuration;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 
 import static com.codeborne.selenide.Selenide.open;
 
-public class Rozetka {
-
-    @BeforeMethod
-    public void before() {
-        Configuration.startMaximized = true;
-        Configuration.timeout = 5000;
-        open("https://www.rozetka.com.ua");
-
-    }
-
+public class Rozetka extends BaseTest {
     @Test
-
-    public void pageObject() throws IOException {
-        new MainPageLogic().SmartphonesTvAndElectronicsMenuClick()
-                .smartphonesImgClickJS()
-                .selectSortClick().loadMoreCatalogItem().loadMoreCatalogItem()
-                .saveTopSalesItems(SmartphonesLogic.listOfTopSalesItems)
-                .writeTopSalesItemsToFile(SmartphonesLogic.listOfTopSalesItems)
+    public void checkRozetka() throws IOException {
+        open("https://www.rozetka.com.ua");
+        new MainPageLogic().selectSmartPhonesTvAndElectronics()
+                .selectSmartPhoneCategory()
+                .selectOfDecreasingSort()
+                .loadMoreCatalogItem(2)
+                .saveTopSalesItems(SmartPhonesLogic.listOfTopSalesItems)
+                .writeTopSalesItemsToFile(SmartPhonesLogic.listOfTopSalesItems)
                 .checkSortingByPrice();
     }
 }

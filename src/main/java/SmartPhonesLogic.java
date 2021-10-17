@@ -3,25 +3,29 @@ import org.testng.Assert;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.visible;
 
-public class SmartphonesLogic extends SmartphonesElements {
+public class SmartPhonesLogic extends SmartPhonesElements {
     public static ArrayList<String> listOfTopSalesItems = new ArrayList<>();
 
-    public SmartphonesLogic selectSortClick() {
+    public SmartPhonesLogic selectOfDecreasingSort() {
         selectSort.shouldBe(visible).click();
         selectSortOption.shouldBe(visible).click();
         return this;
     }
 
-    public SmartphonesLogic loadMoreCatalogItem() {
-        moreCatalogItems.scrollIntoView("{block: \"end\"}").click();
+    public SmartPhonesLogic loadMoreCatalogItem(int count) {
+        for (int i = 0; i < count; i++) {
+            moreCatalogItems.scrollIntoView("{block: \"end\"}").click();
+        }
         return this;
     }
 
-    public SmartphonesLogic saveTopSalesItems(ArrayList<String> list) {
+    public SmartPhonesLogic saveTopSalesItems(ArrayList<String> list) {
         if (titleOfSalesGood.size() > 0) {
             for (int i = 0; i < titleOfSalesGood.size(); i++) {
                 String lineForRecord = String.format("%s\t%s\r\n", titleOfSalesGood.get(i).getText(), priceOfSalesGood.get(i).getText());
@@ -31,31 +35,26 @@ public class SmartphonesLogic extends SmartphonesElements {
         return this;
     }
 
-    public SmartphonesLogic writeTopSalesItemsToFile(ArrayList<String> list) throws IOException {
-        FileWriter filewriter = new FileWriter("C:\\Autodoc\\result.txt");
+    public SmartPhonesLogic writeTopSalesItemsToFile(ArrayList<String> list) throws IOException {
+        FileWriter fileWriter = new FileWriter("C:\\autodoc\\result.txt");
         for (String item : list) {
-            filewriter.write(item); // Записываем все елементы листа в файл
+            fileWriter.write(item);
         }
-        filewriter.close();
+        fileWriter.close();
         return this;
     }
 
-    public SmartphonesLogic checkSortingByPrice() {
+    public SmartPhonesLogic checkSortingByPrice() {
         List<Double> pricesFromSite = new ArrayList<>();
-
         for (SelenideElement element : labelPrices) {
-//            String price = element.text();
             double price = Double.parseDouble(
-                    element.getText().replaceAll("\\s+", ""));
+                    element.getText().replaceAll("\\s", ""));
             pricesFromSite.add(price);
         }
-        //делаем копию списка pricesFromSite и сортируем список sortedPrices
         List<Double> sortedPrices = new ArrayList(pricesFromSite);
-
-        Collections.sort(sortedPrices);  //по возростанию
-        Collections.reverse(sortedPrices); //по убыванию
+        Collections.sort(sortedPrices);
+        Collections.reverse(sortedPrices);
         Assert.assertEquals(pricesFromSite, sortedPrices);
-
         return this;
     }
 }

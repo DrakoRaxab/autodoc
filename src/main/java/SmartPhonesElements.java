@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.*;
 
-public class SmartphonesElements {
+public class SmartPhonesElements {
     SelenideElement selectSort = $(By.tagName("select"));
     SelenideElement selectSortOption = $(By.xpath("//option[contains(text(),'От дорогих к дешевым')]"));
     SelenideElement moreCatalogItems = $(By.xpath("//span[@class='show-more__text']"));
